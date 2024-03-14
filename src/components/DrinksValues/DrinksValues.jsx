@@ -1,8 +1,9 @@
-// drinks -> { beer: 3, whiskey: 2, wine: 1 }
+import imgReact from "../../assets/images/react.svg";
 
 const DrinksValues = ({ drinks, total }) => {
   return (
     <ul>
+      <li>React: <img src={imgReact} alt="" /></li>
       <li>Beer: {drinks.beer}</li>
       <li>Whiskey: {drinks.whiskey}</li>
       <li>Wine: {drinks.wine}</li>
