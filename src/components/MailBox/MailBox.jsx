@@ -1,30 +1,26 @@
 // rafce -> snippet for react functional component
-import clsx from "clsx";
+
+import MailBoxListItem from "../MailBoxListItem/MailBoxListItem";
+
 import css from "./MailBox.module.css";
-import MailBoxList from "../MailBoxList/MailBoxList";
 
-const MailBox = ({ users, boxTitle, mailBoxCount = 0 }) => {
-  const isMailBoxIsFull = mailBoxCount === 0;
-
+const MailBox = ({ users, onDeleteUser, boxTitle }) => {
   return (
-    <div
-      className={clsx(css.mailbox, {
-        [css.full]: isMailBoxIsFull,
-      })}
-    >
+    <div className={css.mailbox}>
       <h2 className={css.mailboxTitle}>{boxTitle}</h2>
-      {isMailBoxIsFull ? (
-        <p>
-          <b>
-            Приносимо вибачення за незручності. Наразі немає доступних скриньок
-            для замовлення.
-          </b>
-        </p>
-      ) : (
-        <p>Кількість активних поштових скриньок: {mailBoxCount}</p>
-      )}
 
-      <MailBoxList users={users} />
+      <ul className={css.mailboxList}>
+        {Array.isArray(users) &&
+          users.map((user) => {
+            return (
+              <MailBoxListItem
+                key={user.id}
+                onDeleteUser={onDeleteUser}
+                user={user}
+              />
+            );
+          })}
+      </ul>
     </div>
   );
 };
