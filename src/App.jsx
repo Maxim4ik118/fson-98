@@ -23,8 +23,6 @@ function App() {
   }, [users]);
 
   const onAddUser = (formData) => {
-    // formData -> {  "userEmail": "user@example.com" }
-    // state -> { "id": "1", "userEmail": "user@example.com" }
     const finalUser = {
       ...formData,
       id: nanoid(),
@@ -36,9 +34,6 @@ function App() {
   };
 
   const onDeleteUser = (userId) => {
-    // userId -> 2
-    // [ {id: 1}, {id: 2}, {id: 3}]
-    // [{id: 1}, {id: 3}]
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
   };
 

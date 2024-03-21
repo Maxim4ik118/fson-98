@@ -2,17 +2,19 @@
   {
     "id": "1",
     "userEmail": "user@example.com",
-    "userName": "jorik1"
+    "userName": "jorik1",
+    "favColor": "red"
   },
   {
     "id": "2",
     "userEmail": "max@example.com",
-    "userName": "Jorik Valerijovich"
-
+    "userName": "Jorik Valerijovich",
+    "favColor": "green"
   },
   {
     "id": "3",
     "userEmail": "merry@example.com",
-    "userName": "Gleb"
+    "userName": "Gleb",
+    "favColor": "blue"
   }
 ]
