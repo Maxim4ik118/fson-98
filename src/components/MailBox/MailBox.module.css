@@ -7,6 +7,13 @@
   line-height: 1.25;
 }
 
+.mailboxList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid coral;
+}
+
 .mailbox.full {
   background-color: rgba(255, 0, 51, 0.2);
 }
@@ -14,6 +21,5 @@
 .mailboxTitle {
   margin-bottom: 15px;
   margin-top: 0;
-  text-shadow: 4px 1px 2px rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
 }
-
