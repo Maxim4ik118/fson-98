@@ -1,88 +1,65 @@
-import { useEffect, useMemo, useState } from "react";
-import { nanoid } from "nanoid";
+import { NavLink, Route, Routes } from "react-router-dom";
+import clsx from "clsx";
 
-import MailBox from "./components/MailBox/MailBox";
-import MailBoxForm from "./components/MailBoxForm/MailBoxForm";
+import MailboxPage from "./pages/MailboxPage";
+import ProductsPage from "./pages/ProductsPage";
+import SearchPage from "./pages/SearchPage";
 
-import meestExpressUsers from "./meesExpress.json";
-// import novaPoshtaUsers from "./novaPoshta.json";
-// import ukrPoshtaUsers from "./ukrPoshta.json";
+import css from "./App.module.css";
+import HomePage from "./pages/HomePage";
+import NotFound from "./pages/NotFound";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
+
+/*
+ Робота з маршрутизацією:
+  1. Навчитися змінювати URL-адресу браузера за допогобо 
+    компонента Link | NavLink.
+  2. Підготувати шаблони компонентів(сторінок) та рендерити
+    їх в залежності від шаблону адреси(pathname) в браузері (Route).
+
+
+  Компонети Link | NavLink - ми використовуємо для 
+    внутрішньої навігації всередині веб-сторінки.
+  Тег <a> - ми використовуємо для посиланнь на зовніші 
+    ресурси(ютубе, інста, тг, гугл посилання і т.п.).
+    -- target="_blank" rel="noopener noreferrer" --
+*/
+
+const getNavLinkClassName = ({ isActive }) =>
+  clsx(css.navLink, {
+    [css.active]: isActive,
+  });
 
 function App() {
-  const [users, setUsers] = useState(() => {
-    const stringifiedUsers = localStorage.getItem("users");
-    if (!stringifiedUsers) return meestExpressUsers;
-
-    const parsedUsers = JSON.parse(stringifiedUsers);
-    return parsedUsers;
-  });
-  const [filter, setFilter] = useState("");
-  const [counter, setCounter] = useState(0);
-
-  useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
-  }, [users]);
-
-  const onAddUser = (formData) => {
-    const finalUser = {
-      ...formData,
-      id: nanoid(),
-    };
-
-    setUsers((prevState) => [...prevState, finalUser]);
-    // setUsers([...users, finalUser])
-    // setUsers((prevUsers) => [...prevUsers, finalUser])
-  };
-
-  const onDeleteUser = (userId) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-  };
-
-  const onChangeFilter = (event) => {
-    setFilter(event.target.value);
-  };
-
-  // filter -> "jorik"
-  // users => [{userName: "jorik123"}, {userName: "Kirito"}]
-  // users -> [{userName: "jorik123"}, {userName: "Kirito"}, {userName: "jorik333"}]
-
-  const filteredUsers = useMemo(
-    () =>
-      users.filter((user) => {
-        for (let i = 0; i < 1_000_000_000; i++) {}
-
-        return (
-          user.userName.toLowerCase().includes(filter.toLowerCase()) ||
-          user.userEmail.toLowerCase().includes(filter.toLowerCase())
-        );
-      }),
-    [filter, users]
-  );
-
   return (
     <div>
-      <MailBoxForm onAddUser={onAddUser} />
-      <section>
-        <h2>Counter: {counter}</h2>
-        <button onClick={() => setCounter(counter + 1)}>
-          Click to increment counter
-        </button>
-      </section>
-      <section>
-        <h2>Search users by email or username</h2>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={filter}
-          onChange={onChangeFilter}
-        />
-      </section>
-
-      <MailBox
-        users={filteredUsers}
-        onDeleteUser={onDeleteUser}
-        boxTitle="Meest Express"
-      />
+      <header>
+        <nav className={css.nav}>
+          <NavLink className={getNavLinkClassName} to="/">
+            Home
+          </NavLink>
+          <NavLink className={getNavLinkClassName} to="/mailbox">
+            MailBox
+          </NavLink>
+          <NavLink className={getNavLinkClassName} to="/products">
+            Products
+          </NavLink>
+          <NavLink className={getNavLinkClassName} to="/search">
+            Search
+          </NavLink>
+        </nav>
+      </header>
+      {/* URL -> localhost:5123/products/4 */}
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/mailbox" element={<MailboxPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/:productId/*" element={<ProductDetailsPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
     </div>
   );
 }

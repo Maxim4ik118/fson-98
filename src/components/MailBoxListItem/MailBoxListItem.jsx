@@ -8,7 +8,7 @@ const MailBoxListItem = ({ user, onDeleteUser }) => {
       </p>
       <p className={css.name}>
         Name:
-        <div
+        <span
           style={{
             backgroundColor: user.favColor,
           }}
