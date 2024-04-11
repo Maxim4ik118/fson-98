@@ -1,12 +1,36 @@
-import { createStore, combineReducers } from "redux";
-import { devToolsEnhancer } from "@redux-devtools/extension";
+import { configureStore } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 import { mailboxReducer } from "./mailbox/mailboxReducer";
+import { timerReducer } from "./timer/timerSlice";
 
-const rootReducer = combineReducers({
-    mailbox: mailboxReducer,
+const mailboxPeristConfig = {
+  key: "mailbox",
+  storage,
+  whitelist: ["users"],
+};
 
-})
+export const store = configureStore({
+  reducer: {
+    mailbox: persistReducer(mailboxPeristConfig, mailboxReducer),
+    countDownTimer: timerReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
 
-const enhancer = devToolsEnhancer();
-export const store = createStore(rootReducer, enhancer)
+export const persistor = persistStore(store);

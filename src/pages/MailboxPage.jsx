@@ -6,6 +6,7 @@ import MailBox from "../components/MailBox/MailBox";
 import MailBoxForm from "../components/MailBoxForm/MailBoxForm";
 
 import meestExpressUsers from "../meesExpress.json";
+import { addUser, deleteUser, setFilter } from "../redux/mailbox/mailboxReducer";
 // import novaPoshtaUsers from "./novaPoshta.json";
 // import ukrPoshtaUsers from "./ukrPoshta.json";
 
@@ -47,24 +48,15 @@ function MailboxPage() {
       id: nanoid(),
     };
 
-    const action = { type: "mailbox/ADD_USER", payload: finalUser };
-
-    dispatch(action);
-    // setUsers((prevUsers) => [...prevUsers, finalUser])
+    dispatch(addUser(finalUser));
   };
 
   const onDeleteUser = (userId) => {
-    const action = { type: "mailbox/DELETE_USER", payload: userId };
-
-    dispatch(action);
-    // setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+    dispatch(deleteUser(userId));
   };
 
   const onChangeFilter = (event) => {
-    const action = { type: "mailbox/SET_FILTER", payload: event.target.value };
-
-    dispatch(action)
-    // setFilter(event.target.value);
+    dispatch(setFilter(event.target.value))
   };
 
   const filteredUsers = useMemo(
