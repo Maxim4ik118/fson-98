@@ -1,12 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 
 import MailBox from "../components/MailBox/MailBox";
 import MailBoxForm from "../components/MailBoxForm/MailBoxForm";
 
-import meestExpressUsers from "../meesExpress.json";
-import { addUser, deleteUser, setFilter } from "../redux/mailbox/mailboxReducer";
+import {
+  addUser,
+  deleteUser,
+  setFilter,
+} from "../redux/mailbox/mailboxReducer";
 // import novaPoshtaUsers from "./novaPoshta.json";
 // import ukrPoshtaUsers from "./ukrPoshta.json";
 
@@ -34,12 +37,13 @@ reducer - це чистя функція, яка приймає в себе stat
 
 */
 
-
-
 function MailboxPage() {
   const dispatch = useDispatch();
-  const users = useSelector(state => state.mailbox.users);
-  const filter = useSelector(state => state.mailbox.filter)
+  const users = useSelector((state) => {
+    console.log("state: ", state);
+    return state.mailbox.users;
+  });
+  const filter = useSelector((state) => state.mailbox.filter);
   const [counter, setCounter] = useState(0);
 
   const onAddUser = (formData) => {
@@ -56,7 +60,7 @@ function MailboxPage() {
   };
 
   const onChangeFilter = (event) => {
-    dispatch(setFilter(event.target.value))
+    dispatch(setFilter(event.target.value));
   };
 
   const filteredUsers = useMemo(

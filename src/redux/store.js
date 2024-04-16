@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 
 import { mailboxReducer } from "./mailbox/mailboxReducer";
 import { timerReducer } from "./timer/timerSlice";
+import { productDetailsReducer } from "./productDetails/productDetailsSlice";
 
 const mailboxPeristConfig = {
   key: "mailbox",
@@ -24,6 +25,7 @@ export const store = configureStore({
   reducer: {
     mailbox: persistReducer(mailboxPeristConfig, mailboxReducer),
     countDownTimer: timerReducer,
+    productDetails: productDetailsReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,36 +1,36 @@
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useRef } from "react";
 import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 
 import Loader from "../components/Loader/Loader";
-// import CommentsPage from "./CommentsPage";
+import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 const CommentsPage = lazy(() => import("./CommentsPage"));
 
-import { requestProductDetailsById } from "../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { apiRequestProductDetailsById } from "../redux/productDetails/productDetailsSlice";
 
 const ProductDetailsPage = () => {
   const { productId } = useParams();
-  const [productDetails, setProductDetails] = useState(null);
+  const dispatch = useDispatch();
   const location = useLocation();
   const backLinkRef = useRef(location.state ?? "/");
 
+  const productDetails = useSelector(
+    (state) => state.productDetails.productDetails
+  );
+  const isLoading = useSelector((state) => state.productDetails.isLoading);
+  const isError = useSelector((state) => state.productDetails.isError);
+  const error = useSelector((state) => state.productDetails.error);
+
   useEffect(() => {
-    async function fetchProductDetails() {
-      try {
-        const data = await requestProductDetailsById(productId);
-
-        setProductDetails(data);
-      } catch (error) {
-        console.log("error: ", error);
-      }
-    }
-
-    fetchProductDetails();
-  }, [productId]);
+    dispatch(apiRequestProductDetailsById(productId));
+  }, [dispatch, productId]);
 
   return (
     <div>
       <h1>Product details: {productId}</h1>
       <Link to={backLinkRef.current}>⬅ Go Back</Link>
+      {isLoading && <Loader />}
+      {isError && <ErrorMessage message={error} />}
       {productDetails !== null && (
         <div>
           <img src={productDetails.thumbnail} alt={productDetails.title} />

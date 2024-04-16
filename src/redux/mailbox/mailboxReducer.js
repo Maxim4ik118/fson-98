@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const INITAL_STATE = {
   users: [],
   filter: "",
+  addedUsersCount: 0,
 };
 
 const mailboxSlice = createSlice({
@@ -14,6 +15,7 @@ const mailboxSlice = createSlice({
   reducers: {
     addUser(state, action) {
       state.users.push(action.payload); // 1️⃣
+      state.addedUsersCount += 1;
       // state.users = [...state.users, action.payload] - 2️⃣
     },
     deleteUser(state, action) {
