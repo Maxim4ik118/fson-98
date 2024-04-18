@@ -1,34 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { requestProductDetailsById, requestProducts } from "../../services/api";
-
-export const apiRequestProductDetailsById = createAsyncThunk(
-  "productDetails/get",
-  async (productId, thunkApi) => {
-    try {
-      const data = await requestProductDetailsById(productId);
-
-      return data; // ТЕ, ЩО ПОВЕРТАЄТЬСЯ З САНКИ ПОТРАПЛЯЄ В action.payload
-    } catch (error) {
-      return thunkApi.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const apiGetProducts = createAsyncThunk(
-  "products/getAll",
-  async (_, thunkApi) => {
-    try {
-      const data = await requestProducts();
-
-      return data; // ТЕ, ЩО ПОВЕРТАЄТЬСЯ З САНКИ ПОТРАПЛЯЄ В action.payload
-    } catch (error) {
-      return thunkApi.rejectWithValue(error.message);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { apiGetProducts, apiRequestProductDetailsById } from "./productDetailsOps";
 
 const INITAL_STATE = {
-  productDetails: null,
+  details: null,
   products: null,
   isLoading: false,
   isError: false,
@@ -68,5 +42,7 @@ const productDetailsSlice = createSlice({
         state.isError = true;
       }),
 });
+
+
 
 export const productDetailsReducer = productDetailsSlice.reducer;

@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { clearTimer, incrementTimer } from "../redux/timer/timerSlice";
+import { selectTimer } from "../redux/timer/selectors";
 
 const NotFound = () => {
   const dispatch = useDispatch();
-  const timer = useSelector((state) => state.countDownTimer.timer);
+  const timer = useSelector(selectTimer);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

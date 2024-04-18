@@ -5,6 +5,9 @@ import MailBoxListItem from "../MailBoxListItem/MailBoxListItem";
 import css from "./MailBox.module.css";
 
 const MailBox = ({ users, onDeleteUser, boxTitle }) => {
+
+
+  
   return (
     <div className={css.mailbox}>
       <h2 className={css.mailboxTitle}>{boxTitle}</h2>

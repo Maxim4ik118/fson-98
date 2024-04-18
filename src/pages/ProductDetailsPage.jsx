@@ -6,7 +6,13 @@ import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 const CommentsPage = lazy(() => import("./CommentsPage"));
 
 import { useDispatch, useSelector } from "react-redux";
-import { apiRequestProductDetailsById } from "../redux/productDetails/productDetailsSlice";
+import {
+  selectProductDetails,
+  selectProductDetailsError,
+  selectProductDetailsIsError,
+  selectProductDetailsIsLoading,
+} from "../redux/productDetails/selectors";
+import { apiRequestProductDetailsById } from "../redux/productDetails/productDetailsOps";
 
 const ProductDetailsPage = () => {
   const { productId } = useParams();
@@ -14,12 +20,10 @@ const ProductDetailsPage = () => {
   const location = useLocation();
   const backLinkRef = useRef(location.state ?? "/");
 
-  const productDetails = useSelector(
-    (state) => state.productDetails.productDetails
-  );
-  const isLoading = useSelector((state) => state.productDetails.isLoading);
-  const isError = useSelector((state) => state.productDetails.isError);
-  const error = useSelector((state) => state.productDetails.error);
+  const productDetails = useSelector(selectProductDetails);
+  const isLoading = useSelector(selectProductDetailsIsLoading);
+  const isError = useSelector(selectProductDetailsIsError);
+  const error = useSelector(selectProductDetailsError);
 
   useEffect(() => {
     dispatch(apiRequestProductDetailsById(productId));

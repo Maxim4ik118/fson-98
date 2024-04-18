@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import clsx from "clsx";
 
@@ -39,6 +39,7 @@ const getNavLinkClassName = ({ isActive }) =>
   });
 
 function App() {
+
   return (
     <div>
       <header>

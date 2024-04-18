@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { requestProductsByQuery } from "../services/api";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { apiGetProducts } from "../redux/productDetails/productDetailsSlice";
+import { apiGetProducts } from "../redux/productDetails/productDetailsOps";
 
 export const useProductSearch = ({ isSearchPage = false }) => {
   const dispatch = useDispatch();
