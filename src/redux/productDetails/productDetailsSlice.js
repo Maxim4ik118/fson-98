@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { apiGetProducts, apiRequestProductDetailsById } from "./productDetailsOps";
 
 const INITAL_STATE = {
-  details: null,
+  productDetails: null,
   products: null,
   isLoading: false,
   isError: false,

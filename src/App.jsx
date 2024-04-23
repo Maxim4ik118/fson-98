@@ -1,13 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
-import clsx from "clsx";
+import { Route, Routes } from "react-router-dom";
 
-// import MailboxPage from "./pages/MailboxPage";
-// import ProductsPage from "./pages/ProductsPage";
-// import SearchPage from "./pages/SearchPage";
-// import HomePage from "./pages/HomePage";
-// import NotFound from "./pages/NotFound";
-// import ProductDetailsPage from "./pages/ProductDetailsPage";
 import Loader from "./components/Loader/Loader";
 
 const MailboxPage = lazy(() => import("./pages/MailboxPage"));
@@ -16,8 +9,14 @@ const SearchPage = lazy(() => import("./pages/SearchPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const ProductDetailsPage = lazy(() => import("./pages/ProductDetailsPage"));
+// TODO: add lazy loading
+import RegistrationPage from "./pages/RegistrationPage";
+import LoginPage from "./pages/LoginPage";
+import ContactsPage from "./pages/ContactsPage";
+import Layout from "./components/Layout/Layout";
+import { useDispatch } from "react-redux";
+import { apiRefreshUser } from "./redux/auth/authSlice";
 
-import css from "./App.module.css";
 /*
  Робота з маршрутизацією:
   1. Навчитися змінювати URL-адресу браузера за допогобо 
@@ -33,48 +32,34 @@ import css from "./App.module.css";
     -- target="_blank" rel="noopener noreferrer" --
 */
 
-const getNavLinkClassName = ({ isActive }) =>
-  clsx(css.navLink, {
-    [css.active]: isActive,
-  });
-
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(apiRefreshUser());
+  }, [dispatch]);
 
   return (
-    <div>
-      <header>
-        <nav className={css.nav}>
-          <NavLink className={getNavLinkClassName} to="/">
-            Home
-          </NavLink>
-          <NavLink className={getNavLinkClassName} to="/mailbox">
-            MailBox
-          </NavLink>
-          <NavLink className={getNavLinkClassName} to="/products">
-            Products
-          </NavLink>
-          <NavLink className={getNavLinkClassName} to="/search">
-            Search
-          </NavLink>
-        </nav>
-      </header>
-      {/* URL -> localhost:5123/products/4 */}
-      <main>
-        <Suspense fallback={<Loader />}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/mailbox" element={<MailboxPage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route
-              path="/products/:productId/*"
-              element={<ProductDetailsPage />}
-            />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </main>
-    </div>
+    <Layout>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
+
+          <Route path="/mailbox" element={<MailboxPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route
+            path="/products/:productId/*"
+            element={<ProductDetailsPage />}
+          />
+          <Route path="/search" element={<SearchPage />} />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </Layout>
   );
 }
 
