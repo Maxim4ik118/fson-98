@@ -16,6 +16,8 @@ import ContactsPage from "./pages/ContactsPage";
 import Layout from "./components/Layout/Layout";
 import { useDispatch } from "react-redux";
 import { apiRefreshUser } from "./redux/auth/authSlice";
+import RestrictedRoute from "./components/RestrictedRoute/RestrictedRoute";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 /*
  Робота з маршрутизацією:
@@ -44,17 +46,63 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegistrationPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/contacts" element={<ContactsPage />} />
+          <Route
+            path="/register"
+            element={
+              <RestrictedRoute>
+                <RegistrationPage />
+              </RestrictedRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <RestrictedRoute>
+                <LoginPage />
+              </RestrictedRoute>
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute>
+                <ContactsPage />
+              </PrivateRoute>
+            }
+          />
 
-          <Route path="/mailbox" element={<MailboxPage />} />
-          <Route path="/products" element={<ProductsPage />} />
+          <Route
+            path="/mailbox"
+            element={
+              <PrivateRoute>
+                <MailboxPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <PrivateRoute>
+                <ProductsPage />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/products/:productId/*"
-            element={<ProductDetailsPage />}
+            element={
+              <PrivateRoute>
+                <ProductDetailsPage />
+              </PrivateRoute>
+            }
           />
-          <Route path="/search" element={<SearchPage />} />
+          <Route
+            path="/search"
+            element={
+              <PrivateRoute>
+                <SearchPage />
+              </PrivateRoute>
+            }
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

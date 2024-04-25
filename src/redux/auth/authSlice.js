@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const instance = axios.create({
+export const instance = axios.create({
   baseURL: "https://connections-api.herokuapp.com",
 });
 
@@ -62,6 +62,20 @@ export const apiRefreshUser = createAsyncThunk(
   }
 );
 
+export const apiLogout = createAsyncThunk(
+  "auth/logout",
+  async (_, thunkApi) => {
+    try {
+      await instance.post("/users/logout");
+      clearToken();
+
+      return;
+    } catch (e) {
+      return thunkApi.rejectWithValue(e.message);
+    }
+  }
+);
+
 const INITAL_STATE = {
   isSignedIn: false,
   userData: null,
@@ -78,24 +92,11 @@ const authSlice = createSlice({
   // Об'єкт редюсерів
   extraReducers: (builder) =>
     builder
-      .addCase(apiRegister.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
       .addCase(apiRegister.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSignedIn = true;
         state.userData = action.payload.user;
         state.token = action.payload.token;
-      })
-      .addCase(apiRegister.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      })
-
-      .addCase(apiLogin.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
       })
       .addCase(apiLogin.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -103,25 +104,39 @@ const authSlice = createSlice({
         state.userData = action.payload.user;
         state.token = action.payload.token;
       })
-      .addCase(apiLogin.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      })
-      
-      .addCase(apiRefreshUser.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
       .addCase(apiRefreshUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSignedIn = true;
         state.userData = action.payload;
       })
-      .addCase(apiRefreshUser.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
+      .addCase(apiLogout.fulfilled, () => {
+        return INITAL_STATE;
       })
-      ,
+
+      .addMatcher(
+        isAnyOf(
+          apiRegister.pending,
+          apiLogin.pending,
+          apiRefreshUser.pending,
+          apiLogout.pending,
+        ),
+        (state) => {
+          state.isLoading = true;
+          state.isError = false;
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          apiRegister.rejected,
+          apiLogin.rejected,
+          apiRefreshUser.rejected,
+          apiLogout.rejected,
+        ),
+        (state) => {
+          state.isLoading = false;
+          state.isError = true;
+        }
+      ),
 });
 
 export const authReducer = authSlice.reducer;

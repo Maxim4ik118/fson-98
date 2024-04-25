@@ -55,7 +55,7 @@ const LoginPage = () => {
             <ErrorMessage component="p" name="password" />
           </label>
           <br />
-          <button type="submit">▶ Create new user</button>
+          <button type="submit">😜 Log in into account</button>
         </Form>
       </Formik>
     </div>
